@@ -84,6 +84,11 @@ struct GraemeShip : ShipBase {
     int SetupShip() override;
 };
 
+struct AegieShip : ShipBase {
+    AegieShip() { name = "Aegie"; }
+    int SetupShip() override;
+};
+
 // ===== Main game class =====
 class AstroBots : public Game
 {

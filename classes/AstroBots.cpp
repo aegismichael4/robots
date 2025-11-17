@@ -188,6 +188,29 @@ int GraemeShip::SetupShip() {
     return Finalize();
 }
 
+int AegieShip::SetupShip() {
+    // Move toward scanned objects and fire when close
+    SCAN();
+    IF_SEEN() {
+        TURN_TO_SCAN();
+        THRUST(2);
+        IF_SCAN_LE(150) {  // close range work
+            IF_SHIP_CAN_FIRE_PHASER() {
+                FIRE_PHASER();
+            }
+        }
+    }
+    IF_SHIP_DAMAGED() {
+        SCAN();
+        IF_SEEN() {
+            IF_SCAN_LE(350) {  // Increased from 200 - flee earlier
+                THRUST(3);
+            }
+        }
+    }
+    return Finalize();
+}
+
 // ===== AstroBots game implementation =====
 AstroBots::AstroBots() {
     _currentTurn = 0;
@@ -203,6 +226,7 @@ std::vector<std::unique_ptr<ShipBase>> AstroBots::makeShips() {
     v.emplace_back(std::make_unique<DroneShip>());
     v.emplace_back(std::make_unique<MinerShip>());
     v.emplace_back(std::make_unique<GraemeShip>());
+    v.emplace_back(std::make_unique<AegieShip>());
     return v;
 }
 
